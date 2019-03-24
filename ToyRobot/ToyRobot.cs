@@ -8,6 +8,7 @@ namespace ToyRobot
 {
     class ToyRobot
     {
+        //main method
         static void Main(string[] args)
         {
             Util util = new Util();
@@ -25,6 +26,7 @@ namespace ToyRobot
             }
         }
 
+        //starting the command parsing and processing
         static void Init()
         {
             CommandProcessor commandProcessor = new CommandProcessor();
@@ -33,12 +35,13 @@ namespace ToyRobot
             ContinueConfirmation();
         }
 
+        //method to help user continue runnning the program
         static void ContinueConfirmation()
         {
             try
             {
                 Util util = new Util();
-                util.DisplayMessage("\nDo you wish to continue?(Y/N)");
+                util.DisplayMessage("\nDo you wish to continue walking?(Y/N)");
                 string strContinue = Console.ReadLine().ToString();
                 if (strContinue.ToLower().Equals("y"))
                 {

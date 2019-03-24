@@ -32,6 +32,7 @@ namespace ToyRobot
         {
             try
             {
+                //Getting the table size from config file
                 Table table = new Table();
                 table.GetTableSize(out XMax, out YMax);
             }
@@ -149,6 +150,8 @@ namespace ToyRobot
                 util.DisplayMessage("Sorry! An unexpected error occured!");
             }
         }
+
+        //Report the position (X,Y,F) of the Robot
         public void Report()
         {
             try
@@ -161,11 +164,13 @@ namespace ToyRobot
             }
         }
 
+        //Turn left of the facing direction
         public void Left()
         {
             try
             {
                 int value = (int)FaceDirection;
+                //Moving the Robot in the circular direction
                 var name = Enum.GetName(typeof(Direction), (--value + NumberOfDirections) % NumberOfDirections);
                 FaceDirection = (Direction)Enum.Parse(typeof(Direction), name);
             }
@@ -175,6 +180,7 @@ namespace ToyRobot
             }
         }
 
+        //Turn right of the face direction
         public void Right()
         {
             try
@@ -189,7 +195,7 @@ namespace ToyRobot
             }
         }
 
-
+        //Move the robot one step ahead in the direction of the face direction
         public void Move()
         {
             try
@@ -226,6 +232,7 @@ namespace ToyRobot
             }
         }
 
+        //Placing the robot at (X,Y,F)
         public void Place(string command)
         {
             try
@@ -248,6 +255,7 @@ namespace ToyRobot
                     }
                     else
                     {
+                        //placed the robot
                         IsPlaced = true;
                     }
                 }
@@ -258,6 +266,7 @@ namespace ToyRobot
             }
         }
 
+        //checking whether the placed or moved position is valid
         private bool IsPositionValid()
         {
             try
