@@ -1,0 +1,26 @@
+﻿PLACE 1,2,EAST
+MOVE
+MOVE
+LEFT
+MOVE
+MOVE
+RIGHT
+MOVE
+MOVE
+MOVE
+MOVE
+MOVE
+RIght
+MOVE
+Move
+Move
+Move
+Move
+Right
+Move
+Move
+Move
+Move
+Move
+Right
+Report
