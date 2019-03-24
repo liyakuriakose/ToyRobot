@@ -29,7 +29,6 @@ namespace ToyRobot
         {
             CommandProcessor commandProcessor = new CommandProcessor();
             commandProcessor.ReadCommand();
-            commandProcessor.DisplayCommand();
             commandProcessor.ExecuteCommand();
             ContinueConfirmation();
         }
@@ -39,7 +38,7 @@ namespace ToyRobot
             try
             {
                 Util util = new Util();
-                util.DisplayMessage("Do you wish to continue?(Y/N)");
+                util.DisplayMessage("\nDo you wish to continue?(Y/N)");
                 string strContinue = Console.ReadLine().ToString();
                 if (strContinue.ToLower().Equals("y"))
                 {

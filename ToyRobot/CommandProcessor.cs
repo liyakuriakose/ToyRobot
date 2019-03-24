@@ -50,6 +50,7 @@ namespace ToyRobot
                 if (!String.IsNullOrEmpty(txtCommandFile) && File.Exists(txtCommandFile))
                 {
                     Commands = File.ReadAllLines(txtCommandFile);
+                    DisplayCommand();
                 }
                 else
                 {
@@ -71,10 +72,10 @@ namespace ToyRobot
                 {
                     util.DisplayMessage("\t");
                     util.DisplayMessage("I'm moving with the following instructions:");
-                    util.DisplayMessage("==========================================");
+                    util.DisplayMessage("==========================================\n");
                     foreach (string command in Commands)
                     {
-                        util.DisplayMessage("\t" + command);
+                        util.DisplayMessage(command);
                     }
                     util.DisplayMessage("==========================================");
                     util.DisplayMessage("\t");
@@ -95,48 +96,52 @@ namespace ToyRobot
         {
             try
             {
-                if (Commands != null && Commands.Count() > 0)
+                if (Commands != null)
                 {
-                    foreach (string command in Commands)
+                    if (Commands.Count() > 0)
                     {
 
-                        if (command.Trim().ToUpper().StartsWith("PLACE"))
+                        foreach (string command in Commands)
                         {
-                            Place(command);
-                        }
-                        else if (IsPlaced)
-                        {
-                            if (command.Trim().ToUpper().Equals("MOVE"))
-                            {
-                                Move();
-                            }
-                            else if (command.Trim().ToUpper().Equals("LEFT"))
-                            {
-                                Left();
-                            }
-                            else if (command.Trim().ToUpper().Equals("RIGHT"))
-                            {
-                                Right();
 
-                            }
-                            else if (command.Trim().ToUpper().Equals("REPORT"))
+                            if (command.Trim().ToUpper().StartsWith("PLACE"))
                             {
-                                Report();
+                                Place(command);
                             }
-                            else
-                            {                                
-                                util.DisplayMessage($"The command '{command}' was ignored as is not valid!!");
+                            else if (IsPlaced)
+                            {
+                                if (command.Trim().ToUpper().Equals("MOVE"))
+                                {
+                                    Move();
+                                }
+                                else if (command.Trim().ToUpper().Equals("LEFT"))
+                                {
+                                    Left();
+                                }
+                                else if (command.Trim().ToUpper().Equals("RIGHT"))
+                                {
+                                    Right();
+
+                                }
+                                else if (command.Trim().ToUpper().Equals("REPORT"))
+                                {
+                                    Report();
+                                }
+                                else
+                                {
+                                    util.DisplayMessage($"The command '{command}' was ignored as is not valid!!");
+                                }
                             }
                         }
+                        if (!IsPlaced)
+                        {
+                            util.DisplayMessage("Please place Robot at a valid position to start traversing!!");
+                        }
                     }
-                    if (!IsPlaced)
+                    else
                     {
-                        util.DisplayMessage("Please place Robot at a valid position to start traversing!!");
+                        util.DisplayMessage("Command File Empty!! Please enter a commmand to Execute!!");
                     }
-                }
-                else
-                {
-                    util.DisplayMessage("Command File Empty!! Please enter a commmand to Execute!!");
                 }
             }
             catch (Exception ex)
