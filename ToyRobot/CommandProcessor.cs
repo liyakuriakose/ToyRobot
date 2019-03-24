@@ -30,8 +30,15 @@ namespace ToyRobot
 
         public CommandProcessor()
         {
-            Table table = new Table();
-            table.GetTableSize(out XMax, out YMax);
+            try
+            {
+                Table table = new Table();
+                table.GetTableSize(out XMax, out YMax);
+            }
+            catch (Exception ex)
+            {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
+            }
         }
 
         //Reads the command from the ToyRobotCommand Text file
@@ -64,12 +71,12 @@ namespace ToyRobot
                 {
                     util.DisplayMessage("\t");
                     util.DisplayMessage("I'm moving with the following instructions:");
-                    util.DisplayMessage("========================================================");
+                    util.DisplayMessage("==========================================");
                     foreach (string command in Commands)
                     {
                         util.DisplayMessage("\t" + command);
                     }
-                    util.DisplayMessage("========================================================");
+                    util.DisplayMessage("==========================================");
                     util.DisplayMessage("\t");
                 }
                 else
@@ -86,121 +93,157 @@ namespace ToyRobot
         //Parses the command and executes it
         public void ExecuteCommand()
         {
-            foreach (string command in Commands)
+            try
             {
-
-                if (command.Trim().ToUpper().StartsWith("PLACE"))
+                if (Commands != null && Commands.Count() > 0)
                 {
-                    Place(command);
-                }
-                else if (IsPlaced)
-                {
-                    if (command.Trim().ToUpper().Equals("MOVE"))
+                    foreach (string command in Commands)
                     {
-                        Move();
-                    }
-                    else if (command.Trim().ToUpper().Equals("LEFT"))
-                    {
-                        Left();
-                    }
-                    else if (command.Trim().ToUpper().Equals("RIGHT"))
-                    {
-                        Right();
 
+                        if (command.Trim().ToUpper().StartsWith("PLACE"))
+                        {
+                            Place(command);
+                        }
+                        else if (IsPlaced)
+                        {
+                            if (command.Trim().ToUpper().Equals("MOVE"))
+                            {
+                                Move();
+                            }
+                            else if (command.Trim().ToUpper().Equals("LEFT"))
+                            {
+                                Left();
+                            }
+                            else if (command.Trim().ToUpper().Equals("RIGHT"))
+                            {
+                                Right();
+
+                            }
+                            else if (command.Trim().ToUpper().Equals("REPORT"))
+                            {
+                                Report();
+                            }
+                            else
+                            {                                
+                                util.DisplayMessage($"The command '{command}' was ignored as is not valid!!");
+                            }
+                        }
                     }
-                    else if (command.Trim().ToUpper().Equals("REPORT"))
+                    if (!IsPlaced)
                     {
-                        Report();
-                    }
-                    else
-                    {
-                        util.DisplayMessage($"The command {0} was ignored as is not valid!!, command");
+                        util.DisplayMessage("Please place Robot at a valid position to start traversing!!");
                     }
                 }
                 else
                 {
-                    util.DisplayMessage("Please place Robot at a valid position to start traversing!!");
+                    util.DisplayMessage("Command File Empty!! Please enter a commmand to Execute!!");
                 }
             }
-        }
-        private void Report()
-        {
-            //util.DisplayMessage
-            // Console.WriteLine
-            Console.WriteLine("{0},{1},{2}", XPosRobot, YPosRobot, FaceDirection);
-        }
-
-        private void Left()
-        {
-            int value = (int)FaceDirection;
-            var name = Enum.GetName(typeof( Direction), (--value + NumberOfDirections) % NumberOfDirections);
-            FaceDirection = ( Direction)Enum.Parse(typeof( Direction), name);
-        }
-
-        private void Right()
-        {
-            int value = (int)FaceDirection;
-            var name = Enum.GetName(typeof( Direction), (++value) % NumberOfDirections);
-            FaceDirection = ( Direction)Enum.Parse(typeof( Direction), name);
-        }
-
-
-        private void Move()
-        {
-            int xPosBefore = XPosRobot;
-            int yPosBefore = YPosRobot;
-            switch (FaceDirection)
+            catch (Exception ex)
             {
-                case  Direction.NORTH:
-                    YPosRobot++;
-                    break;
-                case  Direction.SOUTH:
-                    YPosRobot--;
-                    break;
-                case  Direction.WEST:
-                    XPosRobot--;
-                    break;
-                case  Direction.EAST:
-                    XPosRobot++;
-                    break;
-                default:
-                    break;
+                util.DisplayMessage("Sorry! An unexpected error occured!");
             }
-            if (!IsPositionValid())
+        }
+        public void Report()
+        {
+            try
             {
-                XPosRobot = xPosBefore;
-                YPosRobot = yPosBefore;
-                util.DisplayMessage("Couldn't move Robot!! Position out of bounds!!!");
+                util.DisplayMessage($"\tRobot is at: {XPosRobot},{YPosRobot},{FaceDirection}");
+            }
+            catch (Exception ex)
+            {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
             }
         }
 
-        private void Place(string command)
+        public void Left()
+        {
+            try
+            {
+                int value = (int)FaceDirection;
+                var name = Enum.GetName(typeof(Direction), (--value + NumberOfDirections) % NumberOfDirections);
+                FaceDirection = (Direction)Enum.Parse(typeof(Direction), name);
+            }
+            catch (Exception ex)
+            {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
+            }
+        }
+
+        public void Right()
+        {
+            try
+            {
+                int value = (int)FaceDirection;
+                var name = Enum.GetName(typeof(Direction), (++value) % NumberOfDirections);
+                FaceDirection = (Direction)Enum.Parse(typeof(Direction), name);
+            }
+            catch (Exception ex)
+            {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
+            }
+        }
+
+
+        public void Move()
+        {
+            try
+            {
+                int xPosBefore = XPosRobot;
+                int yPosBefore = YPosRobot;
+                switch (FaceDirection)
+                {
+                    case Direction.NORTH:
+                        YPosRobot++;
+                        break;
+                    case Direction.SOUTH:
+                        YPosRobot--;
+                        break;
+                    case Direction.WEST:
+                        XPosRobot--;
+                        break;
+                    case Direction.EAST:
+                        XPosRobot++;
+                        break;
+                    default:
+                        break;
+                }
+                if (!IsPositionValid())
+                {
+                    XPosRobot = xPosBefore;
+                    YPosRobot = yPosBefore;
+                    //util.DisplayMessage("Couldn't move Robot!! Position out of bounds!!!");
+                }
+            }
+            catch (Exception ex)
+            {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
+            }
+        }
+
+        public void Place(string command)
         {
             try
             {
                 string[] placeCommand = command.Split(new Char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
                 if (placeCommand != null && placeCommand.Count() == 4)
                 {
-                    for (int i = 0; i <= 4; i++)
+                    int xPosBefore = XPosRobot;
+                    int yPosBefore = YPosRobot;
+                    Direction faceDirection = FaceDirection;
+                    XPosRobot = Convert.ToInt32(placeCommand[1].Trim());
+                    YPosRobot = Convert.ToInt32(placeCommand[2].Trim());
+                    FaceDirection = (Direction)Enum.Parse(typeof(Direction), placeCommand[3].Trim().ToUpper());
+                    if (!IsPositionValid())
                     {
-                        int xPosBefore = XPosRobot;
-                        int yPosBefore = YPosRobot;
-                         Direction faceDirection = FaceDirection;
-                        XPosRobot = Convert.ToInt32(placeCommand[1].Trim());
-                        YPosRobot = Convert.ToInt32(placeCommand[2].Trim());
-                        
-                        FaceDirection = ( Direction)Enum.Parse(typeof( Direction), placeCommand[3].Trim().ToUpper());
-                        if (!IsPositionValid())
-                        {
-                            XPosRobot = xPosBefore;
-                            YPosRobot = yPosBefore;
-                            FaceDirection = faceDirection;
-                            util.DisplayMessage("Couldn't place the Robot in the position!! Position out of bounds!!!");
-                        }
-                        else
-                        {
-                            IsPlaced = true;
-                        }
+                        XPosRobot = xPosBefore;
+                        YPosRobot = yPosBefore;
+                        FaceDirection = faceDirection;
+                        util.DisplayMessage("Couldn't place the Robot in the position!! Position out of bounds!!!");
+                    }
+                    else
+                    {
+                        IsPlaced = true;
                     }
                 }
             }
@@ -212,12 +255,20 @@ namespace ToyRobot
 
         private bool IsPositionValid()
         {
-            if ((xMax > XPosRobot && XPosRobot >=0) && (yMax > YPosRobot && YPosRobot>=0))
+            try
             {
-                return true;
+                if ((XMax > XPosRobot && XPosRobot >= 0) && (YMax > YPosRobot && YPosRobot >= 0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                util.DisplayMessage("Sorry! An unexpected error occured!");
                 return false;
             }
         }

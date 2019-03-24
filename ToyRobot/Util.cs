@@ -15,10 +15,6 @@ namespace ToyRobot
         public void DisplayMessage(string message)
         {
             Console.WriteLine(message);
-        }
-
-        //Read from file
-       
-        
+        }        
     }
 }
